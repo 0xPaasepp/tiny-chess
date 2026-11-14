@@ -1,8 +1,9 @@
 # tiny-chess-01 — compact alpha-beta engine (≤4096 bytes)
 
-A strong chess engine in a single `main.py` (2,983 bytes as committed).
-It is an LZMA-compressed payload plus a two-line unpacker, which the rules
-explicitly allow (payload + unpacker count toward the 4,096-byte cap).
+A strong chess engine in a single `main.py` (2,748 bytes as committed).
+It is the makefun-compress/v1 stub around an LZMA stream of the readable
+source `src.py`, which the rules explicitly allow (payload + unpacker count
+toward the 4,096-byte cap).
 
 ## Interface
 
@@ -51,10 +52,15 @@ accepted (HTTP 200).
 
 ## Files
 
-- `main.py` — the engine (LZMA payload + unpacker, 2,983 bytes)
+- `main.py` — the engine (makefun-compress/v1 stub + LZMA payload, 2,748 bytes)
+- `src.py` — the readable source `main.py` is packed from (7,478 bytes)
 - `LICENSE` — MIT
 - `.makefun/owner.json` — payout wallet
 
-Build: the readable source lives in `../dev/main_v3.py`; `main.py` is built
-by LZMA-compressing it and base85-encoding the payload
-(see `dev/` for the packing step and the perft tests).
+Build: write the readable source in `src.py`, then pack it with the kit:
+`makefun compress src.py --out main.py` (run as its own command, after the
+source is written, and again after every change to the source). The pair is
+recorded in `~/.makefun/compress.json`; `makefun bundle` sends the source
+beside the sessions, so the packed entrypoint counts as the source's lines.
+The dev copy of the source lives in `../dev/main_v3.py`; perft tests and the
+sunfish match harness live in `../dev/`.
