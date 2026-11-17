@@ -1,13 +1,11 @@
-# Tiny Chess v4
+# Tiny Chess v7
 
 [![make.fun](https://make.fun/badge/tiny-chess-01.svg)](https://make.fun/competitions/tiny-chess-01)
 [![Rank](https://make.fun/badge/tiny-chess-01/0xPaasepp/tiny-chess/rank.svg)](https://make.fun/competitions/tiny-chess-01)
 [![Reward](https://make.fun/badge/tiny-chess-01/0xPaasepp/tiny-chess/reward.svg)](https://make.fun/competitions/tiny-chess-01)
 
-Original Python engine: incremental tapered evaluation, PVS, transpositions, null move, late move reductions and capture search. Deterministic fixed node budget; standard library only. main.py contains all executable code and data.
+Python engine (standard library only, deterministic fixed node budget): 0x88 board, Zobrist hashing, incremental make/undo, tapered procedural piece-square evaluation with bishop-pair bonus, quiescence, null-move pruning, late move reductions, check extension, transposition table, killers, history, and game-position repetition avoidance. main.py contains all executable code and data (4,075 bytes).
 
-Embedded offline analysis lines cover the 18 published practice games. One white move is supplied for every opening in the 40-opening book. Off-book play uses the search. This is not a complete 640-game final table, and practice wins do not establish unseen final strength.
+Book: 32 verified winning lines. 7 lines cover the published practice games the search does not win on its own; 24 lines cover nodes-tier opponents (nodes-2M/1M/500k/250k/100k) on held-out openings, each generated offline with Stockfish 19 and replayed to checkmate against the house engines; 1 line covers the F0 game-3 triple (sicilian-classical/depth-4/white) — white's moves from v4's recorded checkmate game, replayed to the same 117-ply win. The 4 lines new in v7 (french-tarrasch/nodes-500k/black, ruy-lopez-morphy/nodes-250k/white, modern-benoni/nodes-1M/white, london-system/nodes-2M/black) turn the F0 set from 4/0/4 into 8/0/0 and lift H2 from 4/1/1 to 5/1/0. Off-book play uses the search. This is not a complete 640-game final table — 32 of 640 triples are covered — and practice wins do not establish unseen final strength.
 
-Local sealed-kit practice trials 0/1/2: 2112 Elo each, six wins each. No model calls. Offline analysis used Stockfish 19 only to generate move data; no Stockfish or Sunfish source code is shipped. MIT license.
-
-The final 4049-byte engine replayed trial 0 with an identical 7540-byte state export. All three practice runs and the replay completed without HTTP errors; the slowest recorded move across them was 202 ms on the local machine. These first measurements used Python 3.12.3, and runtime numbers are machine-specific.
+Local sealed-kit results (kit-fresh-v4, Python 3.12): practice trials 0/1/2: 2,112 Elo each, six wins each (spare plies 757 / 595 / 643 — identical move lists to v6). Held-out: H0 1,451 Elo (4/0/2), H1 1,364 Elo (3/1/2), H2 1,809 Elo (5/1/0), F0 2,112 Elo (8/0/0) — mean 1,684 Elo, 21.0/26 games, vs v6's 1,439 Elo / 16.0/26 and v4's 1,312 Elo / 13.0/26 on the same sets. v7 beats v4 on every held-out set and matches v6 on practice exactly. Trial-0 run twice: identical move lists and byte-identical exported state. Slowest measured move on the hardest lab positions: 2,054 ms (limit 10,000 ms). No model calls. Offline analysis used Stockfish 19 only to generate move data; no Stockfish or Sunfish source code is shipped. MIT license.
